@@ -1,0 +1,29 @@
+meta {
+  name: 15 - Crear avistamiento (voluntario)
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{base_url}}/reportes/2/avistamientos
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer {{token_voluntario}}
+}
+
+body:json {
+  {
+    "comentario": "Prueba desde Bruno",
+    "lat": 17.05,
+    "lng": -96.63
+  }
+}
+
+assert {
+  res.status: eq 201
+}

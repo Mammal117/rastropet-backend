@@ -1,0 +1,20 @@
+meta {
+  name: 12 - Listar zonas
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{base_url}}/zonas
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer {{token}}
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,31 @@
+meta {
+  name: 14 - Login como voluntario
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "luis.torres@rastropet.com",
+    "password": "Voluntario123!"
+  }
+}
+
+script:post-response {
+  bru.setVar("token_voluntario", res.body.token);
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,20 @@
+meta {
+  name: 16 - Listar avistamientos de un reporte
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{base_url}}/reportes/2/avistamientos
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer {{token}}
+}
+
+assert {
+  res.status: eq 200
+}

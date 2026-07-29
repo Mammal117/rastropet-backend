@@ -1,0 +1,20 @@
+meta {
+  name: 19 - Listar notificaciones (admin)
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{base_url}}/notificaciones
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer {{token}}
+}
+
+assert {
+  res.status: eq 200
+}

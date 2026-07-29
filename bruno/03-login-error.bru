@@ -1,0 +1,27 @@
+meta {
+  name: 03 - Login con credenciales incorrectas
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/auth/login
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "admin@rastropet.com",
+    "password": "contraseña_incorrecta"
+  }
+}
+
+assert {
+  res.status: eq 401
+}

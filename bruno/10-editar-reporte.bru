@@ -1,0 +1,27 @@
+meta {
+  name: 10 - Editar reporte
+  type: http
+  seq: 10
+}
+
+put {
+  url: {{base_url}}/reportes/2
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "estado": "Encontrado"
+  }
+}
+
+assert {
+  res.status: eq 200
+}

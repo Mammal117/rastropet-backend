@@ -1,0 +1,20 @@
+meta {
+  name: 18 - Listar usuarios sin permiso (403)
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{base_url}}/users
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer {{token_voluntario}}
+}
+
+assert {
+  res.status: eq 403
+}

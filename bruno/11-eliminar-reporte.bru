@@ -1,0 +1,20 @@
+meta {
+  name: 11 - Eliminar reporte creado en la prueba 05
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{base_url}}/reportes/{{reporte_creado_id}}
+  body: none
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Authorization: Bearer {{token}}
+}
+
+assert {
+  res.status: eq 200
+}

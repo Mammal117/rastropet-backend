@@ -1,0 +1,33 @@
+meta {
+  name: 05 - Crear reporte
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{base_url}}/reportes
+  body: json
+  auth: none
+}
+
+headers {
+  Accept: application/json
+  Content-Type: application/json
+  Authorization: Bearer {{token}}
+}
+
+body:json {
+  {
+    "zona_id": 1,
+    "mascota": "Prueba Bruno",
+    "especie": "Perro",
+    "fecha_perdida": "2026-07-20"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+script:post-response {
+  bru.setVar("reporte_creado_id", res.body.data.id);
+}
