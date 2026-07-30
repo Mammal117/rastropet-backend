@@ -47,6 +47,13 @@ Route::middleware('role:admin')->group(function () {
 
     Route::get('/reportes/{reporte}/avistamientos', [AvistamientoController::class, 'index']);
 
+    // Dueños y admins pueden invitar nuevos usuarios (voluntarios en el caso
+    // de un dueño; voluntarios o admins en el caso de un admin — la regla
+    // exacta se valida dentro de StoreUserRequest).
+    Route::middleware('role:dueño,admin')->group(function () {
+        Route::post('/users', [UserController::class, 'store']);
+    });
+
     // Solo admin puede gestionar usuarios y ver el historial de notificaciones
     Route::middleware('role:admin')->group(function () {
         Route::apiResource('users', UserController::class)->except(['store']);
