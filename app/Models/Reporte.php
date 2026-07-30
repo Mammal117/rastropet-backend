@@ -12,6 +12,7 @@ class Reporte extends Model
     protected $fillable = [
         'user_id', 'zona_id', 'numero_reporte', 'mascota',
         'especie', 'estado', 'fecha_perdida', 'lat', 'lng',
+        'telefono_contacto', 'nombre_dueno', 'email_contacto',
     ];
 
     public function dueno(): BelongsTo

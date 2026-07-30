@@ -7,6 +7,7 @@ use App\Http\Requests\Reportes\StoreReporteRequest;
 use App\Http\Requests\Reportes\UpdateReporteRequest;
 use App\Http\Resources\ReporteResource;
 use App\Models\Reporte;
+use App\Models\Zona;
 use App\Services\NotificacionService;
 use Illuminate\Http\Request;
 
@@ -42,11 +43,17 @@ class ReporteController extends Controller
 
     public function store(StoreReporteRequest $request)
     {
+        $zona = Zona::findOrFail($request->input('zona_id'));
+
         $reporte = Reporte::create([
             ...$request->validated(),
             'user_id' => $request->user()->id,
             'numero_reporte' => 'RP-' . now()->year . '-' . random_int(1000, 9999),
             'estado' => $request->input('estado', 'Perdido'),
+            // Si no se manda una ubicación exacta, se usa la de la zona
+            // seleccionada para que el reporte sí aparezca en el mapa.
+            'lat' => $request->input('lat') ?? $zona->lat,
+            'lng' => $request->input('lng') ?? $zona->lng,
         ]);
 
         $reporte->load(['dueno', 'zona']);
@@ -67,7 +74,23 @@ class ReporteController extends Controller
     {
         $this->authorize('update', $reporte);
 
-        $reporte->update($request->validated());
+        $estadoAnterior = $reporte->estado;
+        $datos = $request->validated();
+
+        // Si cambian la zona y no mandan lat/lng exactas, el marcador
+        // se mueve junto con la zona nueva.
+        if (isset($datos['zona_id']) && (int) $datos['zona_id'] !== $reporte->zona_id
+            && !$request->filled('lat') && !$request->filled('lng')) {
+            $zonaNueva = Zona::findOrFail($datos['zona_id']);
+            $datos['lat'] = $zonaNueva->lat;
+            $datos['lng'] = $zonaNueva->lng;
+        }
+
+        $reporte->update($datos);
+
+        if ($estadoAnterior === 'Perdido' && $reporte->estado === 'Encontrado') {
+            NotificacionService::enviarAvisoEncontrado($reporte->load(['zona']));
+        }
 
         return new ReporteResource($reporte->load(['dueno', 'zona']));
     }

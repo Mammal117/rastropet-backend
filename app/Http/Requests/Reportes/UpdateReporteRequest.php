@@ -11,7 +11,7 @@ class UpdateReporteRequest extends FormRequest
         return true;
     }
 
-    public function rules(): array
+   public function rules(): array
     {
         return [
             'zona_id' => ['sometimes', 'exists:zonas,id'],
@@ -21,6 +21,9 @@ class UpdateReporteRequest extends FormRequest
             'fecha_perdida' => ['sometimes', 'date'],
             'lat' => ['nullable', 'numeric'],
             'lng' => ['nullable', 'numeric'],
+            'telefono_contacto' => ['sometimes', 'string', 'min:10', 'max:20'],
+            'nombre_dueno' => ['sometimes', 'string', 'max:255'],
+            'email_contacto' => ['sometimes', 'email', 'max:255'],
         ];
     }
 }

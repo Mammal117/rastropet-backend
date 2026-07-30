@@ -16,14 +16,21 @@ class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
-        $role = Role::where('name', $request->role)->first();
+        // Si no se especifica un rol, asignamos por defecto el rol de usuario normal (ej. 'user' o 'cliente')
+        $roleName = $request->role ?? 'user'; 
+        $role = Role::where('name', $roleName)->first();
+
+        // Por seguridad, si el rol no existe, buscamos el primer rol disponible o creamos una alternativa
+        if (!$role) {
+            $role = Role::first(); 
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
+            'phone' => $request->phone ?? null, // Por si el teléfono es opcional en el registro
             'password' => Hash::make($request->password),
-            'role_id' => $role->id,
+            'role_id' => $role ? $role->id : 2, // ID por defecto en caso de emergencia
         ]);
 
         $token = $user->createToken('api-token')->plainTextToken;
