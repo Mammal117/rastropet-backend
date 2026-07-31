@@ -1,6 +1,6 @@
 # RastroPet — Backend y Frontend
 
-Perez Cruz Haniel Eliud
+Ortiz Bautista Josue Ahuitz
 
 
 
